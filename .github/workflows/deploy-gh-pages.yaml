@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: 18
 
-      - name: Build React App
+      - name: Build Next App
         run: |
           yarn install
           yarn build
@@ -47,16 +47,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v2
 
-      - name: Copy Builds
-        run: |
-          mkdir build
-          cp -r dist build/next
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          # Upload build
-          path: "./build"
+          path: "./dist"
 
       - name: Deploy to GitHub Pages
         id: deployment
