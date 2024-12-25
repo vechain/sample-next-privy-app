@@ -34,6 +34,7 @@ import {
 } from "@vechain/dapp-kit-react-privy";
 import { b3trAbi, b3trMainnetAddress } from "../constants";
 import { Interface, ethers } from "ethers";
+import { isValidAddress } from "../AddressUtils";
 
 const HomePage = (): ReactElement => {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -54,7 +55,8 @@ const HomePage = (): ReactElement => {
 
   // A dummy tx sending 0 b3tr tokens
   const clauses = useMemo(() => {
-    if (!receiverAddress || !amount) return [];
+    if (!receiverAddress || !amount || !isValidAddress(receiverAddress))
+      return [];
 
     const clausesArray: any[] = [];
 
@@ -193,6 +195,7 @@ const HomePage = (): ReactElement => {
               <FormControl>
                 <FormLabel>Receiver Address</FormLabel>
                 <Input
+                  isInvalid={!isValidAddress(receiverAddress)}
                   placeholder="0x..."
                   value={receiverAddress}
                   onChange={(e) => setReceiverAddress(e.target.value)}
