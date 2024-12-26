@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  type ReactElement,
-  useMemo,
-  useCallback,
-  useState,
-  useEffect,
-} from "react";
+import { type ReactElement, useState, useEffect } from "react";
 import {
   Button,
   Container,
@@ -15,29 +9,23 @@ import {
   Stack,
   Text,
   useColorMode,
-  useDisclosure,
   VStack,
   Box,
   Spinner,
-  FormControl,
-  FormLabel,
-  Input,
-  Card,
-  CardHeader,
-  CardBody,
+  Grid,
 } from "@chakra-ui/react";
 import {
   useWallet,
-  useSendTransaction,
   WalletButton,
-  TransactionModal,
-  TransactionToast,
   useDAppKitPrivyColorMode,
   useConnex,
 } from "@vechain/dapp-kit-react-privy";
+import { ethers } from "ethers";
+import { TransferB3TR, TransferVET } from "../components";
 import { b3trAbi, b3trMainnetAddress } from "../constants";
-import { Interface, ethers } from "ethers";
-import { isValidAddress } from "../AddressUtils";
+import { Interface } from "ethers";
+
+const abi = new Interface(b3trAbi);
 
 const HomePage = (): ReactElement => {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -48,63 +36,11 @@ const HomePage = (): ReactElement => {
   const { connection, smartAccount, connectedWallet, selectedAccount } =
     useWallet();
 
-  // Add these new state variables
-  const [amount, setAmount] = useState("0");
-  const [receiverAddress, setReceiverAddress] = useState(
-    connectedWallet.address
-  );
   const [b3trBalance, setB3trBalance] = useState("0");
-  const abi = new Interface(b3trAbi);
-
-  // A dummy tx sending 0 b3tr tokens
-  const clauses = useMemo(() => {
-    if (!receiverAddress || !amount || !isValidAddress(receiverAddress))
-      return [];
-
-    const clausesArray: any[] = [];
-
-    clausesArray.push({
-      to: b3trMainnetAddress,
-      value: "0x0",
-      data: abi.encodeFunctionData("transfer", [
-        receiverAddress,
-        ethers.parseEther(amount),
-      ]),
-      comment: `Transfer ${amount} B3TR to ${receiverAddress}`,
-      abi: abi.getFunction("transfer"),
-    });
-    return clausesArray;
-  }, [amount, receiverAddress]);
-
-  const {
-    sendTransaction,
-    status,
-    txReceipt,
-    resetStatus,
-    isTransactionPending,
-    error,
-  } = useSendTransaction({
-    signerAccount: connection.isConnectedWithPrivy
-      ? smartAccount
-      : connectedWallet,
-    privyUIOptions: {
-      title: "Sign to confirm",
-      description: `Transfer ${amount} B3TR to ${receiverAddress}`,
-      buttonText: "Sign",
-    },
+  const [vetBalance, setVETBalance] = useState({
+    balance: BigInt(0),
+    energy: BigInt(0),
   });
-
-  const transactionToast = useDisclosure();
-  const handleTransactionWithToast = useCallback(async () => {
-    transactionToast.onOpen();
-    await sendTransaction(clauses);
-  }, [sendTransaction, clauses]);
-
-  const transactionModal = useDisclosure();
-  const handleTransactionWithModal = useCallback(async () => {
-    transactionModal.onOpen();
-    await sendTransaction(clauses);
-  }, [sendTransaction, clauses]);
 
   useEffect(() => {
     const getB3trBalance = async () => {
@@ -125,8 +61,20 @@ const HomePage = (): ReactElement => {
       }
     };
 
+    const getVETBalance = async () => {
+      if (!selectedAccount.address) return;
+
+      const balance = await thor.account(selectedAccount.address).get();
+
+      setVETBalance({
+        balance: BigInt(balance.balance.toString()),
+        energy: BigInt(balance.energy.toString()),
+      });
+    };
+
     getB3trBalance();
-  }, [selectedAccount.address, abi]);
+    getVETBalance();
+  }, [selectedAccount.address]);
 
   if (connection.isLoadingPrivyConnection) {
     return (
@@ -149,7 +97,7 @@ const HomePage = (): ReactElement => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={"container.lg"}>
       <HStack justifyContent={"space-between"}>
         <WalletButton />
 
@@ -178,6 +126,12 @@ const HomePage = (): ReactElement => {
               <Text>Smart Account: {smartAccount.address}</Text>
               <Text>Deployed: {smartAccount.isDeployed.toString()}</Text>
               <Text>B3TR Balance: {ethers.formatEther(b3trBalance)}</Text>
+              <Text>
+                VET Balance: {ethers.formatEther(vetBalance.balance).toString()}
+              </Text>
+              <Text>
+                VTHO Balance: {ethers.formatEther(vetBalance.energy).toString()}
+              </Text>
             </Box>
           )}
 
@@ -195,80 +149,12 @@ const HomePage = (): ReactElement => {
             </Heading>
           </Box>
 
-          <Card mt={4}>
-            <CardBody>
-              <Heading size={"sm"}>
-                <b>Transfer B3TR</b>
-              </Heading>
-              <Box>
-                <VStack spacing={4} mt={4} alignItems="stretch">
-                  <FormControl>
-                    <FormLabel>Receiver Address</FormLabel>
-                    <Input
-                      isInvalid={!isValidAddress(receiverAddress)}
-                      placeholder="0x..."
-                      value={receiverAddress}
-                      onChange={(e) => setReceiverAddress(e.target.value)}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Amount (B3TR)</FormLabel>
-                    <Input
-                      type="number"
-                      value={amount}
-                      onChange={(e) =>
-                        setAmount(e.target.value !== "" ? e.target.value : "0")
-                      }
-                      min="0"
-                      step="1"
-                    />
-                  </FormControl>
-                </VStack>
-              </Box>
-
-              <Box mt={4}>
-                <HStack mt={4} spacing={4}>
-                  <HStack mt={4} spacing={4}>
-                    <Button
-                      onClick={handleTransactionWithToast}
-                      isLoading={isTransactionPending}
-                      isDisabled={isTransactionPending}
-                    >
-                      Tx with toast
-                    </Button>
-                    <Button
-                      onClick={handleTransactionWithModal}
-                      isLoading={isTransactionPending}
-                      isDisabled={isTransactionPending}
-                    >
-                      Tx with modal
-                    </Button>
-                  </HStack>
-                </HStack>
-              </Box>
-            </CardBody>
-          </Card>
+          <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+            <TransferB3TR />
+            <TransferVET />
+          </Grid>
         </VStack>
       </Stack>
-
-      <TransactionToast
-        isOpen={transactionToast.isOpen}
-        onClose={transactionToast.onClose}
-        status={status}
-        error={error}
-        txReceipt={txReceipt}
-        resetStatus={resetStatus}
-      />
-
-      <TransactionModal
-        isOpen={transactionModal.isOpen}
-        onClose={transactionModal.onClose}
-        status={status}
-        txId={txReceipt?.meta.txID}
-        errorDescription={error?.reason ?? "Unknown error"}
-        showSocialButtons={true}
-        showExplorerButton={true}
-      />
     </Container>
   );
 };
