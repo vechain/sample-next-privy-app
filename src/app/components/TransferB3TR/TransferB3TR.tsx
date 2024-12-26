@@ -10,6 +10,7 @@ import {
   HStack,
   Button,
   useDisclosure,
+  Grid,
 } from "@chakra-ui/react";
 import { isValidAddress } from "../../AddressUtils";
 import {
@@ -113,26 +114,26 @@ export const TransferB3TR = () => {
             </VStack>
           </Box>
 
-          <Box mt={4}>
-            <HStack mt={4} spacing={4}>
-              <HStack mt={4} spacing={4}>
-                <Button
-                  onClick={handleTransactionWithToast}
-                  isLoading={isTransactionPending}
-                  isDisabled={isTransactionPending}
-                >
-                  Tx with toast
-                </Button>
-                <Button
-                  onClick={handleTransactionWithModal}
-                  isLoading={isTransactionPending}
-                  isDisabled={isTransactionPending}
-                >
-                  Tx with modal
-                </Button>
-              </HStack>
-            </HStack>
-          </Box>
+          <Grid
+            templateColumns={["1fr", "1fr", "repeat(2, 1fr)"]}
+            gap={4}
+            mt={4}
+          >
+            <Button
+              onClick={handleTransactionWithToast}
+              isLoading={isTransactionPending}
+              isDisabled={isTransactionPending}
+            >
+              Tx + toast
+            </Button>
+            <Button
+              onClick={handleTransactionWithModal}
+              isLoading={isTransactionPending}
+              isDisabled={isTransactionPending}
+            >
+              Tx + modal
+            </Button>
+          </Grid>
         </CardBody>
       </Card>
 

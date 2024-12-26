@@ -78,7 +78,7 @@ const HomePage = (): ReactElement => {
 
   if (connection.isLoadingPrivyConnection) {
     return (
-      <Container>
+      <Container minH="100vh" py={4}>
         <HStack justifyContent={"center"}>
           <Spinner />
         </HStack>
@@ -88,7 +88,7 @@ const HomePage = (): ReactElement => {
 
   if (!connection.isConnected) {
     return (
-      <Container>
+      <Container minH="100vh" py={4}>
         <HStack justifyContent={"center"}>
           <WalletButton />
         </HStack>
@@ -97,33 +97,27 @@ const HomePage = (): ReactElement => {
   }
 
   return (
-    <Container maxWidth={"container.lg"}>
-      <HStack justifyContent={"space-between"}>
-        <WalletButton />
+    <Container maxW="container.xl" minH="100vh" py={4} wordBreak="break-word">
+      <VStack width="full" spacing={6}>
+        <HStack width="full" justifyContent={"space-between"}>
+          <WalletButton />
+          <Button
+            onClick={() => {
+              toggleDAppKitPrivyColorMode();
+              toggleColorMode();
+            }}
+          >
+            {colorMode === "dark" ? "Light" : "Dark"}
+          </Button>
+        </HStack>
 
-        <Button
-          onClick={() => {
-            toggleDAppKitPrivyColorMode();
-            toggleColorMode();
-          }}
-        >
-          {colorMode === "dark" ? "Light" : "Dark"}
-        </Button>
-      </HStack>
-
-      <Stack
-        mt={10}
-        overflowWrap={"break-word"}
-        wordBreak={"break-word"}
-        whiteSpace={"normal"}
-      >
-        <VStack spacing={4} alignItems="flex-start">
+        <VStack width="full" spacing={8} alignItems="stretch">
           {smartAccount.address && (
-            <Box mt={4}>
+            <VStack width="full" alignItems="flex-start" spacing={2}>
               <Heading size={"md"}>
                 <b>Smart Account</b>
               </Heading>
-              <Text>Smart Account: {smartAccount.address}</Text>
+              <Text>Address: {smartAccount.address}</Text>
               <Text>Deployed: {smartAccount.isDeployed.toString()}</Text>
               <Text>B3TR Balance: {ethers.formatEther(b3trBalance)}</Text>
               <Text>
@@ -132,29 +126,32 @@ const HomePage = (): ReactElement => {
               <Text>
                 VTHO Balance: {ethers.formatEther(vetBalance.energy).toString()}
               </Text>
-            </Box>
+            </VStack>
           )}
 
-          <Box>
+          <VStack width="full" alignItems="flex-start" spacing={2}>
             <Heading size={"md"}>
               <b>Wallet</b>
             </Heading>
             <Text>Address: {connectedWallet?.address}</Text>
             <Text>Connection Type: {connection.source.type}</Text>
-          </Box>
+          </VStack>
 
-          <Box mt={10}>
+          <VStack width="full" alignItems="flex-start" spacing={4}>
             <Heading size={"md"}>
               <b>Smart Account Actions</b>
             </Heading>
-          </Box>
-
-          <Grid templateColumns="repeat(3, 1fr)" gap={4}>
-            <TransferB3TR />
-            <TransferVET />
-          </Grid>
+            <Grid
+              templateColumns={["1fr", "1fr", "repeat(2, 1fr)"]}
+              gap={4}
+              width="full"
+            >
+              <TransferB3TR />
+              <TransferVET />
+            </Grid>
+          </VStack>
         </VStack>
-      </Stack>
+      </VStack>
     </Container>
   );
 };

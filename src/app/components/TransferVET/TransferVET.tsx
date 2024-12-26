@@ -13,6 +13,7 @@ import {
   Input,
   Card,
   CardBody,
+  Grid,
 } from "@chakra-ui/react";
 import {
   useWallet,
@@ -110,26 +111,26 @@ export const TransferVET = () => {
             </VStack>
           </Box>
 
-          <Box mt={4}>
-            <HStack mt={4} spacing={4}>
-              <HStack mt={4} spacing={4}>
-                <Button
-                  onClick={handleVETTransactionWithToast}
-                  isLoading={isVETTransactionPending}
-                  isDisabled={isVETTransactionPending}
-                >
-                  Tx with toast
-                </Button>
-                <Button
-                  onClick={handleVETTransactionWithModal}
-                  isLoading={isVETTransactionPending}
-                  isDisabled={isVETTransactionPending}
-                >
-                  Tx with modal
-                </Button>
-              </HStack>
-            </HStack>
-          </Box>
+          <Grid
+            templateColumns={["1fr", "1fr", "repeat(2, 1fr)"]}
+            gap={4}
+            mt={4}
+          >
+            <Button
+              onClick={handleVETTransactionWithToast}
+              isLoading={isVETTransactionPending}
+              isDisabled={isVETTransactionPending}
+            >
+              Tx + toast
+            </Button>
+            <Button
+              onClick={handleVETTransactionWithModal}
+              isLoading={isVETTransactionPending}
+              isDisabled={isVETTransactionPending}
+            >
+              Tx + modal
+            </Button>
+          </Grid>
         </CardBody>
       </Card>
       <TransactionToast
