@@ -22,6 +22,9 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Card,
+  CardHeader,
+  CardBody,
 } from "@chakra-ui/react";
 import {
   useWallet,
@@ -186,56 +189,65 @@ const HomePage = (): ReactElement => {
             <Text>Connection Type: {connection.source.type}</Text>
           </Box>
 
-          <Box mt={4}>
+          <Box mt={10}>
             <Heading size={"md"}>
-              <b>Actions</b>
+              <b>Smart Account Actions</b>
             </Heading>
-
-            <VStack spacing={4} mt={4} alignItems="stretch">
-              <FormControl>
-                <FormLabel>Receiver Address</FormLabel>
-                <Input
-                  isInvalid={!isValidAddress(receiverAddress)}
-                  placeholder="0x..."
-                  value={receiverAddress}
-                  onChange={(e) => setReceiverAddress(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Amount (B3TR)</FormLabel>
-                <Input
-                  type="number"
-                  value={amount}
-                  onChange={(e) =>
-                    setAmount(e.target.value !== "" ? e.target.value : "0")
-                  }
-                  min="0"
-                  step="1"
-                />
-              </FormControl>
-            </VStack>
           </Box>
 
-          <Box mt={4}>
-            <HStack mt={4} spacing={4}>
-              <HStack mt={4} spacing={4}>
-                <Button
-                  onClick={handleTransactionWithToast}
-                  isLoading={isTransactionPending}
-                  isDisabled={isTransactionPending}
-                >
-                  Tx with toast
-                </Button>
-                <Button
-                  onClick={handleTransactionWithModal}
-                  isLoading={isTransactionPending}
-                  isDisabled={isTransactionPending}
-                >
-                  Tx with modal
-                </Button>
-              </HStack>
-            </HStack>
-          </Box>
+          <Card mt={4}>
+            <CardBody>
+              <Heading size={"sm"}>
+                <b>Transfer B3TR</b>
+              </Heading>
+              <Box>
+                <VStack spacing={4} mt={4} alignItems="stretch">
+                  <FormControl>
+                    <FormLabel>Receiver Address</FormLabel>
+                    <Input
+                      isInvalid={!isValidAddress(receiverAddress)}
+                      placeholder="0x..."
+                      value={receiverAddress}
+                      onChange={(e) => setReceiverAddress(e.target.value)}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Amount (B3TR)</FormLabel>
+                    <Input
+                      type="number"
+                      value={amount}
+                      onChange={(e) =>
+                        setAmount(e.target.value !== "" ? e.target.value : "0")
+                      }
+                      min="0"
+                      step="1"
+                    />
+                  </FormControl>
+                </VStack>
+              </Box>
+
+              <Box mt={4}>
+                <HStack mt={4} spacing={4}>
+                  <HStack mt={4} spacing={4}>
+                    <Button
+                      onClick={handleTransactionWithToast}
+                      isLoading={isTransactionPending}
+                      isDisabled={isTransactionPending}
+                    >
+                      Tx with toast
+                    </Button>
+                    <Button
+                      onClick={handleTransactionWithModal}
+                      isLoading={isTransactionPending}
+                      isDisabled={isTransactionPending}
+                    >
+                      Tx with modal
+                    </Button>
+                  </HStack>
+                </HStack>
+              </Box>
+            </CardBody>
+          </Card>
         </VStack>
       </Stack>
 
