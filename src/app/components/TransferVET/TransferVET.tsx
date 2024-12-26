@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import {
   Button,
   Heading,
@@ -78,6 +78,13 @@ export const TransferVET = () => {
     vetTransactionModal.onOpen();
     await sendVETTransaction(transferVETClauses);
   }, [sendVETTransaction, transferVETClauses]);
+
+  // Update the receiverAddress each time the connectedWallet changes
+  useEffect(() => {
+    if (connectedWallet.address !== undefined) {
+      setVETReceiverAddress(connectedWallet.address);
+    }
+  }, [connectedWallet.address]);
   return (
     <>
       <Card mt={4}>

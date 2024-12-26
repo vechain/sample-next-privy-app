@@ -19,7 +19,7 @@ import {
   useWallet,
   useSendTransaction,
 } from "@vechain/dapp-kit-react-privy";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Interface, ethers } from "ethers";
 import { b3trAbi, b3trMainnetAddress } from "../../constants";
 
@@ -80,6 +80,13 @@ export const TransferB3TR = () => {
     transactionModal.onOpen();
     await sendTransaction(clauses);
   }, [sendTransaction, clauses]);
+
+  // Update the receiverAddress each time the connectedWallet changes
+  useEffect(() => {
+    if (connectedWallet.address !== undefined) {
+      setReceiverAddress(connectedWallet.address);
+    }
+  }, [connectedWallet.address]);
 
   return (
     <>
