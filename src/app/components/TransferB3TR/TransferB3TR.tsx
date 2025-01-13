@@ -18,7 +18,7 @@ import {
   TransactionModal,
   useWallet,
   useSendTransaction,
-} from "@vechain/dapp-kit-react-privy";
+} from "@vechain/vechain-kit";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Interface, ethers } from "ethers";
 import { b3trAbi, b3trMainnetAddress } from "../../constants";
@@ -59,9 +59,9 @@ export const TransferB3TR = () => {
     isTransactionPending,
     error,
   } = useSendTransaction({
-    signerAccount: connection.isConnectedWithPrivy
-      ? smartAccount
-      : connectedWallet,
+    signerAccountAddress: connection.isConnectedWithPrivy
+      ? smartAccount.address
+      : connectedWallet.address,
     privyUIOptions: {
       title: "Sign to confirm",
       description: `Transfer ${amount} B3TR to ${receiverAddress}`,

@@ -19,7 +19,7 @@ import {
   WalletButton,
   useDAppKitPrivyColorMode,
   useConnex,
-} from "@vechain/dapp-kit-react-privy";
+} from "@vechain/vechain-kit";
 import { ethers } from "ethers";
 import { TransferB3TR, TransferVET } from "../components";
 import { b3trAbi, b3trMainnetAddress } from "../constants";

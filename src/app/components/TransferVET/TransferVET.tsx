@@ -20,7 +20,7 @@ import {
   useSendTransaction,
   TransactionModal,
   TransactionToast,
-} from "@vechain/dapp-kit-react-privy";
+} from "@vechain/vechain-kit";
 import { isValidAddress } from "../../AddressUtils";
 import { ethers } from "ethers";
 
@@ -57,9 +57,9 @@ export const TransferVET = () => {
     isTransactionPending: isVETTransactionPending,
     error: vetError,
   } = useSendTransaction({
-    signerAccount: connection.isConnectedWithPrivy
-      ? smartAccount
-      : connectedWallet,
+    signerAccountAddress: connection.isConnectedWithPrivy
+      ? smartAccount.address
+      : connectedWallet.address,
     privyUIOptions: {
       title: "Sign to confirm",
       description: `Transfer ${vetAmount} VET to ${vetReceiverAddress}`,
