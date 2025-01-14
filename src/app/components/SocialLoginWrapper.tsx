@@ -3,8 +3,8 @@
 import { useColorMode } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 
-const DAppKitPrivyProvider = dynamic(
-  async () => (await import("@vechain/vechain-kit")).DAppKitPrivyProvider,
+const VeChainKit = dynamic(
+  async () => (await import("@vechain/vechain-kit")).VeChainKit,
   {
     ssr: false,
   }
@@ -17,7 +17,7 @@ interface Props {
 export function SocialLoginWrapper({ children }: Props) {
   const { colorMode } = useColorMode();
   return (
-    <DAppKitPrivyProvider
+    <VeChainKit
       privyConfig={{
         appId: process.env.NEXT_PUBLIC_PRIVY_APP_ID!,
         clientId: process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID!,
@@ -83,8 +83,11 @@ export function SocialLoginWrapper({ children }: Props) {
           },
         },
       }}
+      loginScreenUI={{
+        preferredLoginMethods: ["email", "google"],
+      }}
     >
       {children}
-    </DAppKitPrivyProvider>
+    </VeChainKit>
   );
 }
