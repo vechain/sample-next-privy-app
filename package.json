@@ -1,17 +1,17 @@
 {
-  "name": "sample-next-privy-app",
+  "name": "sample-next-vechain-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "next build",
-    "clean": "rm -rf .next dist .turbo",
+    "clean": "rm -rf .next dist .turbo && rm -rf node_modules",
     "dev": "next dev"
   },
   "dependencies": {
     "@chakra-ui/react": "2.8.2",
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
-    "@vechain/vechain-kit": "0.9.2",
+    "@vechain/vechain-kit": "*",
     "ethers": "^6.13.4",
     "next": "14.2.10",
     "react": "^18",

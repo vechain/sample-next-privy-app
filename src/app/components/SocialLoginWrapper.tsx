@@ -32,14 +32,14 @@ export function SocialLoginWrapper({ children }: Props) {
         embeddedWallets: {
           createOnLogin: "all-users",
         },
-        ecosystemAppsID: [
-          "clz41gcg00e4ay75dmq3uzzgr", //cleanify
-          "clxdoatq601h35inz6qykgmai",
-          "clpgf04wn04hnkw0fv1m11mnb",
-          "clrtmg1n104ypl60p9w5c3v4c",
-        ],
+
         allowPasskeyLinking: true,
       }}
+      privyEcosystemAppIDS={[
+        "cm4wxxujb022fyujl7g0thb21", //vechain
+        "clz41gcg00e4ay75dmq3uzzgr", //cleanify
+        "cm153hrup0817axti38avlfyg", //greencart
+      ]}
       feeDelegation={{
         delegatorUrl: process.env.NEXT_PUBLIC_DELEGATOR_URL!,
         delegateAllTransactions: true,
