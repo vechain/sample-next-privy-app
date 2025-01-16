@@ -33,8 +33,7 @@ const HomePage = (): ReactElement => {
     useDAppKitPrivyColorMode();
   const { thor } = useConnex();
 
-  const { connection, smartAccount, connectedWallet, selectedAccount } =
-    useWallet();
+  const { connection, smartAccount, connectedWallet, account } = useWallet();
 
   const [b3trBalance, setB3trBalance] = useState("0");
   const [vetBalance, setVETBalance] = useState({
@@ -44,7 +43,7 @@ const HomePage = (): ReactElement => {
 
   useEffect(() => {
     const getB3trBalance = async () => {
-      if (!selectedAccount.address) return;
+      if (!account.address) return;
 
       const balanceOf = abi.getFunction("balanceOf");
       if (!balanceOf) throw new Error("balanceOf function not found in ABI");
@@ -52,7 +51,7 @@ const HomePage = (): ReactElement => {
       const res = await thor
         .account("0x5ef79995FE8a89e0812330E4378eB2660ceDe699")
         .method(balanceOf)
-        .call(selectedAccount.address);
+        .call(account.address);
 
       if (res.reverted) {
         setB3trBalance("0");
@@ -62,9 +61,9 @@ const HomePage = (): ReactElement => {
     };
 
     const getVETBalance = async () => {
-      if (!selectedAccount.address) return;
+      if (!account.address) return;
 
-      const balance = await thor.account(selectedAccount.address).get();
+      const balance = await thor.account(account.address).get();
 
       setVETBalance({
         balance: BigInt(balance.balance.toString()),
@@ -74,7 +73,7 @@ const HomePage = (): ReactElement => {
 
     getB3trBalance();
     getVETBalance();
-  }, [selectedAccount.address]);
+  }, [account.address]);
 
   if (connection.isLoadingPrivyConnection) {
     return (

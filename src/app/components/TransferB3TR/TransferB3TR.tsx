@@ -102,7 +102,7 @@ export const TransferB3TR = () => {
                 <Input
                   isInvalid={!isValidAddress(receiverAddress)}
                   placeholder="0x..."
-                  value={receiverAddress}
+                  value={receiverAddress ?? ""}
                   onChange={(e) => setReceiverAddress(e.target.value)}
                 />
               </FormControl>

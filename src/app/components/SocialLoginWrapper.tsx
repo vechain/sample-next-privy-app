@@ -16,18 +16,18 @@ interface Props {
 
 export function SocialLoginWrapper({ children }: Props) {
   const { colorMode } = useColorMode();
+  const isDarkMode = colorMode === "dark";
   return (
     <VeChainKit
-      privyConfig={{
+      privy={{
         appId: process.env.NEXT_PUBLIC_PRIVY_APP_ID!,
         clientId: process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID!,
         loginMethods: ["google", "twitter", "github", "sms", "email"],
         appearance: {
-          theme: colorMode,
           accentColor: "#696FFD",
           loginMessage: "Select a social media profile",
           logo: "https://i.ibb.co/ZHGmq3y/image-21.png",
-          walletList: [],
+          walletList: ["metamask", "rainbow"],
         },
         embeddedWallets: {
           createOnLogin: "all-users",
@@ -40,35 +40,11 @@ export function SocialLoginWrapper({ children }: Props) {
         ],
         allowPasskeyLinking: true,
       }}
-      feeDelegationConfig={{
+      feeDelegation={{
         delegatorUrl: process.env.NEXT_PUBLIC_DELEGATOR_URL!,
         delegateAllTransactions: true,
       }}
-      dappKitConfig={{
-        nodeUrl: "https://node.vechain.energy",
-        genesis: {
-          number: 0,
-          id: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-          size: 170,
-          parentID:
-            "0xffffffff53616c757465202620526573706563742c20457468657265756d2100",
-          timestamp: 1530316800,
-          gasLimit: 10000000,
-          beneficiary: "0x0000000000000000000000000000000000000000",
-          gasUsed: 0,
-          totalScore: 0,
-          txsRoot:
-            "0x45b0cfc220ceec5b7c1c62c4d4193d38e4eba48e8815729ce75f9c0ab0e4c1c0",
-          txsFeatures: 0,
-          stateRoot:
-            "0x09bfdf9e24dd5cd5b63f3c1b5d58b97ff02ca0490214a021ed7d99b93867839c",
-          receiptsRoot:
-            "0x45b0cfc220ceec5b7c1c62c4d4193d38e4eba48e8815729ce75f9c0ab0e4c1c0",
-          signer: "0x0000000000000000000000000000000000000000",
-          isTrunk: true,
-          transactions: [],
-        },
-        themeMode: colorMode === "dark" ? "DARK" : "LIGHT",
+      dappKit={{
         walletConnectOptions: {
           projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID!,
           metadata: {
@@ -83,8 +59,13 @@ export function SocialLoginWrapper({ children }: Props) {
           },
         },
       }}
-      loginScreenUI={{
+      loginModalUI={{
         preferredLoginMethods: ["email", "google"],
+      }}
+      darkMode={isDarkMode}
+      language="en"
+      network={{
+        type: "main",
       }}
     >
       {children}

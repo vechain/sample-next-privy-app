@@ -99,7 +99,7 @@ export const TransferVET = () => {
                 <Input
                   isInvalid={!isValidAddress(vetReceiverAddress)}
                   placeholder="0x..."
-                  value={vetReceiverAddress}
+                  value={vetReceiverAddress ?? ""}
                   onChange={(e) => setVETReceiverAddress(e.target.value)}
                 />
               </FormControl>
