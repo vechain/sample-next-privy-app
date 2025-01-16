@@ -19,22 +19,6 @@ export function SocialLoginWrapper({ children }: Props) {
   const isDarkMode = colorMode === "dark";
   return (
     <VeChainKit
-      privy={{
-        appId: process.env.NEXT_PUBLIC_PRIVY_APP_ID!,
-        clientId: process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID!,
-        loginMethods: ["google", "twitter", "github", "sms", "email"],
-        appearance: {
-          accentColor: "#696FFD",
-          loginMessage: "Select a social media profile",
-          logo: "https://i.ibb.co/ZHGmq3y/image-21.png",
-          walletList: ["metamask", "rainbow"],
-        },
-        embeddedWallets: {
-          createOnLogin: "all-users",
-        },
-
-        allowPasskeyLinking: true,
-      }}
       privyEcosystemAppIDS={[
         "cm4wxxujb022fyujl7g0thb21", //vechain
         "clz41gcg00e4ay75dmq3uzzgr", //cleanify
@@ -58,9 +42,6 @@ export function SocialLoginWrapper({ children }: Props) {
             ],
           },
         },
-      }}
-      loginModalUI={{
-        preferredLoginMethods: ["email", "google"],
       }}
       darkMode={isDarkMode}
       language="en"
